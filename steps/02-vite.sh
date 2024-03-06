@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 # Add bare minimum configuration for ViteJS library
-echo dist >> .gitignore
-cat > vite.config.ts << "EOF"
+echo dist >>.gitignore
+cat >vite.config.ts <<"EOF"
 import { defineConfig } from 'vite'
 
 export default defineConfig({

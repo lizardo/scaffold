@@ -12,12 +12,12 @@ run_steps() {
 		commands="$(sed -n '4,$p' "${step}")"
 		commit_title="$(sed -n '3s/^# *//p' "${step}")"
 		cat <<-__EOF
-		### File: ${step}
+			### File: ${step}
 
-		${commands}
+			${commands}
 
-		git add .
-		git commit -m '${commit_title}'
+			git add .
+			git commit -m '${commit_title}'
 
 		__EOF
 		nsteps=$((nsteps + 1))
@@ -25,24 +25,27 @@ run_steps() {
 	echo "Processed ${nsteps} steps" >&2
 }
 
-output="$(set -e; run_steps)"
+output="$(
+	set -e
+	run_steps
+)"
 
 if [[ -n "${output}" ]]; then
-	cat <<-__EOF
-	#!/bin/bash
-	set -eu
-	### Common initialization
+	cat <<-__EOF | shfmt
+		#!/bin/bash
+		set -eu
+		### Common initialization
 
-	function jq_inplace() {
-		filter="\$1"
-		file="\$2"
-		jq "\${filter}" "\${file}" > "\${file}.tmp"
-		mv "\${file}.tmp" "\${file}"
-	}
+		function jq_inplace() {
+			filter="\$1"
+			file="\$2"
+			jq "\${filter}" "\${file}" > "\${file}.tmp"
+			mv "\${file}.tmp" "\${file}"
+		}
 
-	git init output.git
-	cd output.git
+		git init output.git
+		cd output.git
 
-	${output}
+		${output}
 	__EOF
 fi

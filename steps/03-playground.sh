@@ -3,8 +3,8 @@ set -eu
 # Create a playground app for testing the library
 mkdir playground
 cd playground
-jq -n '{type: "module", scripts: {dev: "vite"}}' > package.json
-cat > index.html << "EOF"
+jq -n '{type: "module", scripts: {dev: "vite"}}' >package.json
+cat >index.html <<"EOF"
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -18,7 +18,7 @@ cat > index.html << "EOF"
 </html>
 EOF
 mkdir src
-cat > src/main.ts << "EOF"
+cat >src/main.ts <<"EOF"
 import hello from 'hello-lib'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
